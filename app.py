@@ -76,30 +76,30 @@ def app():
         st.header("Sample Defect Images")
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.image(sample_images["Defect01"], caption="Defect01.", use_column_width=True)
+            st.image(sample_images["Defect01"], caption="Defect01", use_column_width=True)
         with col2:
-            st.image(sample_images["Defect02"], caption="Defect02.", use_column_width=True)
+            st.image(sample_images["Defect02"], caption="Defect02", use_column_width=True)
         with col3:
-            st.image(sample_images["Defect03"], caption="Defect03.", use_column_width=True)
+            st.image(sample_images["Defect03"], caption="Defect03", use_column_width=True)
         st.header("Sample Non-Defect Images")
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.image(sample_images["Non-Defect01"], caption="Non-Defect01.", use_column_width=True)
+            st.image(sample_images["Non-Defect01"], caption="Non-Defect01", use_column_width=True)
         with col2:
-            st.image(sample_images["Non-Defect02"], caption="Non-Defect02.", use_column_width=True)
+            st.image(sample_images["Non-Defect02"], caption="Non-Defect02", use_column_width=True)
         with col3:
-            st.image(sample_images["Non-Defect03"], caption="Non-Defect03.", use_column_width=True)
+            st.image(sample_images["Non-Defect03"], caption="Non-Defect03", use_column_width=True)
 
         sample = st.selectbox(label = "Select here", options = list(sample_images.keys()), label_visibility="hidden")   
 
     # If an image is uploaded, make a prediction on it
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image.", use_column_width=True)
+        st.image(image, caption="Uploaded Image", use_column_width=True)
         predictions = predict(image)
     elif sample:    
         image = Image.open(sample_images[sample])
-        st.image(image, caption=sample.capitalize() + " Image.", use_column_width=True)
+        st.image(image, caption=sample.capitalize() + " Image", use_column_width=True)
         predictions = predict(image)
       
     # Show  predictions with their probabilities
