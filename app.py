@@ -11,7 +11,18 @@ from glob import glob
 import streamlit as st
 import numpy as np
 
+#Define the labels
 labels = ['Defect', 'nDefect']
+
+# Define the sample images
+sample_images = {
+    "Defect01": "pics/Defect/0.jpg",
+    "Defect02": "pics/Defect/1.jpg",
+    "Defect03": "pics/Defect/2.jpg",
+    "Non-Defect01": "pics/nDefect/0.jpg",
+    "Non-Defect02": "pics/nDefect/1.jpg",
+    "Non-Defect03": "pics/nDefect/2.jpg"
+}
 
 class ONNXModel(pl.LightningModule):
     def __init__(self, model_path, n_classes=2):
@@ -35,7 +46,7 @@ class ONNXModel(pl.LightningModule):
         return preds
 
 # Load the model on the appropriate device
-model = ONNXModel(model_path='/home/shokul/AIBuilder/deploy/DefectDetection-AIBuilders/models/model.onnx')
+model = ONNXModel(model_path='models/model.onnx')
 model = model.to("cpu")
 
 transform = T.Compose([
@@ -61,26 +72,42 @@ def app():
     uploaded_file = st.file_uploader("Upload your image...", type=["jpg"])
 
     with st.expander("Or choose from sample here..."):
-      tab1, tab2 = st.tabs(["Defect", "Non-Defect"])
-      with tab1:
-        st.header("Defect")
-        st.image("https://static.streamlit.io/examples/cat.jpg")
-      with tab2:
-        st.header("Non-Defect")
-        st.image("https://static.streamlit.io/examples/dog.jpg")
+        
+        st.header("Sample Defect Images")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.image(sample_images["Defect01"], caption="Defect01.", use_column_width=True)
+        with col2:
+            st.image(sample_images["Defect02"], caption="Defect02.", use_column_width=True)
+        with col3:
+            st.image(sample_images["Defect03"], caption="Defect03.", use_column_width=True)
+        st.header("Sample Non-Defect Images")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.image(sample_images["Non-Defect01"], caption="Non-Defect01.", use_column_width=True)
+        with col2:
+            st.image(sample_images["Non-Defect02"], caption="Non-Defect02.", use_column_width=True)
+        with col3:
+            st.image(sample_images["Non-Defect03"], caption="Non-Defect03.", use_column_width=True)
+
+        sample = st.selectbox(label = "Select here", options = list(sample_images.keys()), label_visibility="hidden")   
 
     # If an image is uploaded, make a prediction on it
     if uploaded_file is not None:
-      image = Image.open(uploaded_file)
-      st.image(image, caption="Uploaded Image.", use_column_width=True)
-      predictions = predict(image)
+        image = Image.open(uploaded_file)
+        st.image(image, caption="Uploaded Image.", use_column_width=True)
+        predictions = predict(image)
+    elif sample:    
+        image = Image.open(sample_images[sample])
+        st.image(image, caption=sample.capitalize() + " Image.", use_column_width=True)
+        predictions = predict(image)
       
     # Show  predictions with their probabilities
     if predictions is not  None:
-      st.write(predictions)
-      for pred, prob in zip(labels, predictions[0]):
-          st.write(f"{pred}: {prob * 100:.2f}%")
-          st.progress(prob.item())
+        st.write(predictions)
+        for pred, prob in zip(labels, predictions[0]):
+            st.write(f"{pred}: {prob * 100:.2f}%")
+            st.progress(prob.item())
     else:
         st.write("No predictions.")
 
