@@ -2,10 +2,13 @@
 
 This project aims to classify digital textile printing as either defect or non-defect. It was developed by Settapun Laoaree from AI-Builders in Arcane Whales.
 
+![Defective Printing](pics/Defect/6.jpg)
+
 ## How to Use
 
 To get started, install the required dependencies by running the following command:
-`pip install -r requirements.txt`
+
+> `pip install -r requirements.txt`
 
 ## Blog
 
